@@ -1,0 +1,171 @@
+:root {
+  --bg:           #080018;
+  --green:        #00ff41;
+  --green-dim:    #00aa2b;
+  --green-dark:   #004d14;
+  --pink:         #ff003c;
+  --pink-dim:     #aa0028;
+  --purple:       #4b5bab;
+  --purple-dim:   #2d3666;
+  --white:        #e8e8e8;
+  --black:        #000000;
+  --amber:        #ffaa00;
+  --cyan:         #00ffff;
+
+  --font-heading: 'Press Start 2P', cursive;
+  --font-body:    'VT323', monospace;
+  --font-ui:      'Silkscreen', cursive;
+
+  --pixel-size:   4px;
+  --scanline-opacity: 0.04;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: auto;
+}
+
+body {
+  background: var(--bg);
+  color: var(--green);
+  font-family: var(--font-body);
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  cursor: none;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+img, canvas, video {
+  image-rendering: pixelated;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+#cursor {
+  position: fixed;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  image-rendering: pixelated;
+}
+
+.pixel-border {
+  box-shadow:
+    0 -4px 0 0 var(--green),
+    0  4px 0 0 var(--green),
+    -4px 0 0 0 var(--green),
+     4px 0 0 0 var(--green);
+}
+
+.pixel-border-pink {
+  box-shadow:
+    0 -4px 0 0 var(--pink),
+    0  4px 0 0 var(--pink),
+    -4px 0 0 0 var(--pink),
+     4px 0 0 0 var(--pink);
+}
+
+.pixel-border-purple {
+  box-shadow:
+    0 -4px 0 0 var(--purple),
+    0  4px 0 0 var(--purple),
+    -4px 0 0 0 var(--purple),
+     4px 0 0 0 var(--purple);
+}
+
+#crt-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 99999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, var(--scanline-opacity)) 2px,
+    rgba(0, 0, 0, var(--scanline-opacity)) 4px
+  );
+}
+
+#crt-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 60%,
+    rgba(0, 0, 0, 0.45) 100%
+  );
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--green-dim); image-rendering: pixelated; }
+
+::selection { background: var(--pink); color: var(--black); }
+
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.8; }
+  94% { opacity: 1; }
+  96% { opacity: 0.6; }
+  97% { opacity: 1; }
+}
+
+@keyframes scanline-anim {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 100%; }
+}
+
+@keyframes walk-right {
+  0%   { background-position: 0px 0px; }
+  25%  { background-position: -16px 0px; }
+  50%  { background-position: -32px 0px; }
+  75%  { background-position: -48px 0px; }
+  100% { background-position: 0px 0px; }
+}
+
+@keyframes idle-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes glitch {
+  0%  { clip-path: inset(0 0 95% 0); transform: translate(-2px, 0); }
+  10% { clip-path: inset(30% 0 50% 0); transform: translate(2px, 0); }
+  20% { clip-path: inset(70% 0 10% 0); transform: translate(-1px, 0); }
+  30% { clip-path: inset(10% 0 80% 0); transform: translate(1px, 0); }
+  40% { clip-path: inset(50% 0 30% 0); transform: translate(-2px, 0); }
+  100% { clip-path: inset(0 0 0 0); transform: translate(0, 0); }
+}
+
+@media (max-width: 768px) {
+  html { font-size: 12px; }
+}
+
+@media (max-width: 480px) {
+  html { font-size: 10px; }
+}
